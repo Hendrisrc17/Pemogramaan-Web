@@ -1,0 +1,407 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Projects — Portofolio</title>
+
+  <!-- existing dashboard stylesheet -->
+  <link href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <!-- page-scoped styles for project grid (won't break your global CSS) -->
+  <style>
+    /* container inside content area */
+    .projects-main {
+      padding: 2.5rem;
+      box-sizing: border-box;
+      min-height: calc(100vh - 80px);
+    }
+
+    .projects-header {
+      display:flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      margin-bottom: 1.6rem;
+    }
+
+    .projects-header h1 {
+      margin: 0;
+      font-size: 1.6rem;
+      color: var(--dark);
+    }
+    .projects-header p {
+      margin: 0;
+      color: var(--dark-grey);
+      font-size: 0.95rem;
+    }
+
+    /* grid */
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1.4rem;
+      align-items: stretch;
+    }
+
+    /* card 3D wrapper */
+    .proj-card {
+      perspective: 1200px; /* gives depth for children transforms */
+    }
+
+    .proj-card__inner {
+      position: relative;
+      width: 100%;
+      height: 320px;
+      border-radius: 14px;
+      overflow: hidden;
+      transform-style: preserve-3d;
+      transition: transform 0.35s ease, box-shadow 0.35s ease;
+      box-shadow: 0 10px 30px rgba(15, 23, 42, 0.08);
+      background: linear-gradient(180deg, rgba(255,255,255,0.6), rgba(250,250,250,0.4));
+      border: 1px solid rgba(10,20,40,0.04);
+    }
+
+    .proj-card__media {
+      position: absolute;
+      inset: 0;
+      background-size: cover;
+      background-position: center;
+      transform: translateZ(0px) scale(1);
+      transition: transform 0.45s cubic-bezier(.2,.9,.3,1);
+      will-change: transform;
+    }
+
+    /* subtle overlay and title */
+    .proj-card__overlay {
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(180deg, rgba(0,0,0,0.06), rgba(0,0,0,0.25));
+      display: flex;
+      align-items: flex-end;
+      padding: 1rem;
+      box-sizing: border-box;
+      color: #fff;
+      z-index: 3;
+      gap: .5rem;
+    }
+
+    .proj-card__title {
+      margin: 0;
+      font-size: 1.05rem;
+      font-weight: 600;
+      text-shadow: 0 6px 30px rgba(3, 10, 34, 0.45);
+    }
+
+    .proj-card__meta {
+      font-size: 0.85rem;
+      color: rgba(255,255,255,0.9);
+      opacity: .95;
+    }
+
+    /* floating label panel in front (for depth) */
+    .proj-card__front {
+      position: absolute;
+      left: 1rem;
+      top: 1rem;
+      z-index: 4;
+      transform: translateZ(30px);
+      pointer-events: none;
+    }
+
+    .proj-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      background: rgba(255,255,255,0.95);
+      color: var(--dark);
+      padding: 6px 10px;
+      border-radius: 999px;
+      font-weight: 600;
+      font-size: 0.85rem;
+      box-shadow: 0 6px 18px rgba(10,20,40,0.06);
+      pointer-events: auto;
+    }
+
+    /* hover state (will be controlled by JS too) */
+    .proj-card__inner:hover {
+      box-shadow: 0 22px 50px rgba(3, 10, 34, 0.12);
+    }
+
+    /* subtle details panel visible on hover */
+    .proj-card__details {
+      position: absolute;
+      left: 1rem;
+      right: 1rem;
+      bottom: 1rem;
+      z-index: 5;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 1rem;
+      transform: translateZ(40px) translateY(8px);
+    }
+
+    .proj-btn {
+      background: rgba(255,255,255,0.96);
+      color: var(--dark);
+      padding: 8px 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      font-size: 0.9rem;
+      text-decoration: none;
+      box-shadow: 0 6px 18px rgba(10,20,40,0.06);
+    }
+
+    /* small caption below card */
+    .proj-caption {
+      margin-top: .6rem;
+      font-size: 0.95rem;
+      color: var(--dark);
+      font-weight: 600;
+    }
+    .proj-subcaption {
+      font-size: 0.85rem;
+      color: var(--dark-grey);
+      margin-top: .15rem;
+    }
+
+    /* responsiveness */
+    @media (max-width: 1000px) {
+      .projects-grid { grid-template-columns: repeat(2, 1fr); }
+      .proj-card__inner { height: 300px; }
+    }
+    @media (max-width: 640px) {
+      .projects-grid { grid-template-columns: 1fr; }
+      .proj-card__inner { height: 220px; border-radius: 12px; }
+      .proj-card__overlay { padding: .8rem; }
+      .proj-card__title { font-size: 1rem; }
+    }
+  </style>
+</head>
+
+<body>
+  <!-- Sidebar (reuse your sidebar markup) -->
+  <div class="sidebar">
+    <a href="#" class="logo">
+      <i class='bx bx-code-alt'></i>
+      <div class="logo-name"><span>Portofolio</span>CV</div>
+    </a>
+
+    <ul class="side-menu">
+      <li><a href="{{ url_for('dashboard') }}"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+      <li><a href="{{ url_for('riwayat') }}"><i class='bx bx-history'></i>Riwayat</a></li>
+      <li><a href="{{ url_for('skill') }}"><i class='bx bxs-brain'></i>Skill</a></li>
+      <li class="active"><a href="{{ url_for('project') }}"><i class='bx bx-code-block'></i>Project</a></li>
+      <li><a href="{{ url_for('sertifikat') }}"><i class='bx bxs-certification'></i>Sertifikat</a></li>
+      <li><a href="{{ url_for('upload') }}"><i class='bx bx-upload'></i>Upload</a></li>
+    </ul>
+
+    <ul class="side-menu">
+      <li>
+        <a href="#" class="logout"><i class='bx bx-log-out'></i> Logout</a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Content -->
+  <div class="content">
+    <nav>
+      <i class='bx bx-menu'></i>
+      <form action="#"><div class="form-input">
+        <input type="search" placeholder="Search..."><button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+      </div></form>
+
+      <a href="#" class="notif"><i class='bx bx-bell'></i><span class="count">12</span></a>
+      <a href="#" class="profile"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Profile"></a>
+    </nav>
+    <!-- Main Dashboard Section -->
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Project</h1>
+          <ul class="breadcrumb">
+            <li><a href="{{ url_for('dashboard') }}">Home</a></li> /
+            <li><a href="{{ url_for('project') }}" class="active">Project</a></li>
+          </ul>
+        </div>
+      </div>
+
+    <main class="projects-main">
+      <div class="projects-header">
+        <div>
+          <h1>Projects</h1>
+          <p>Berikut adalah beberapa proyek yang telah saya kerjakan.</p>
+        </div>
+        <div>
+          <!-- optional controls -->
+        </div>
+      </div>
+
+      <div class="projects-grid">
+        <!-- Project 1 -->
+        <div class="proj-card">
+          <div class="proj-card__inner" data-tilt data-scale="1.06" data-speed="600">
+            <div class="proj-card__media" style=""></div>
+
+            <div class="proj-card__front">
+              <span class="proj-badge">Web</span>
+            </div>
+
+            <div class="proj-card__overlay">
+              <div>
+                <h3 class="proj-card__title">E-Store UI</h3>
+                <div class="proj-card__meta">Responsive e-commerce UI</div>
+              </div>
+            </div>
+
+            <div class="proj-card__details">
+              <a class="proj-btn" href="#">Lihat</a>
+              <div style="color: rgba(255,255,255,0.95); font-weight:600;">2024</div>
+            </div>
+          </div>
+          <div class="proj-caption">E-Store UI</div>
+          <div class="proj-subcaption">HTML • CSS • JS</div>
+        </div>
+
+        <!-- Project 2 -->
+        <div class="proj-card">
+          <div class="proj-card__inner" data-tilt data-scale="1.03" data-speed="550">
+            <div class="proj-card__media" style=""></div>
+
+            <div class="proj-card__front">
+              <span class="proj-badge">Design</span>
+            </div>
+
+            <div class="proj-card__overlay">
+              <div>
+                <h3 class="proj-card__title">Brand Landing</h3>
+                <div class="proj-card__meta">Landing page & brand kit</div>
+              </div>
+            </div>
+
+            <div class="proj-card__details">
+              <a class="proj-btn" href="#">Lihat</a>
+              <div style="color: rgba(255,255,255,0.95); font-weight:600;">2023</div>
+            </div>
+          </div>
+          <div class="proj-caption">Brand Landing</div>
+          <div class="proj-subcaption">Figma • UI/UX</div>
+        </div>
+
+        <!-- Project 3 -->
+        <div class="proj-card">
+          <div class="proj-card__inner" data-tilt data-scale="1.05" data-speed="650">
+            <div class="proj-card__media" style=""></div>
+
+            <div class="proj-card__front">
+              <span class="proj-badge">App</span>
+            </div>
+
+            <div class="proj-card__overlay">
+              <div>
+                <h3 class="proj-card__title">Task Manager</h3>
+                <div class="proj-card__meta">Cross-platform app UI</div>
+              </div>
+            </div>
+
+            <div class="proj-card__details">
+              <a class="proj-btn" href="#">Lihat</a>
+              <div style="color: rgba(255,255,255,0.95); font-weight:600;">2024</div>
+            </div>
+          </div>
+          <div class="proj-caption">Task Manager</div>
+          <div class="proj-subcaption">React • Electron</div>
+        </div>
+
+        <!-- Project 4 -->
+        <div class="proj-card">
+          <div class="proj-card__inner" data-tilt data-scale="1.04" data-speed="580">
+            <div class="proj-card__media" style=""></div>
+
+            <div class="proj-card__front">
+              <span class="proj-badge">UX</span>
+            </div>
+
+            <div class="proj-card__overlay">
+              <div>
+                <h3 class="proj-card__title">Portfolio Redesign</h3>
+                <div class="proj-card__meta">Case study & prototype</div>
+              </div>
+            </div>
+
+            <div class="proj-card__details">
+              <a class="proj-btn" href="#">Lihat</a>
+              <div style="color: rgba(255,255,255,0.95); font-weight:600;">2022</div>
+            </div>
+          </div>
+          <div class="proj-caption">Portfolio Redesign</div>
+          <div class="proj-subcaption">Research • Prototype</div>
+        </div>
+
+        <!-- add more project cards as needed -->
+      </div>
+    </main>
+  </div>
+
+  <!-- small JS: tilt effect (no external libs) -->
+  <script>
+    // Simple 3D tilt implementation — lightweight and works on mouse / touch
+    (function () {
+      const supportsTouch = 'ontouchstart' in window || navigator.maxTouchPoints;
+      const cards = document.querySelectorAll('.proj-card__inner');
+
+      function bindCard(card) {
+        const media = card.querySelector('.proj-card__media');
+        const rect = () => card.getBoundingClientRect();
+
+        function handleMove(e) {
+          const r = rect();
+          const x = ( (e.clientX ?? (e.touches && e.touches[0].clientX)) - r.left );
+          const y = ( (e.clientY ?? (e.touches && e.touches[0].clientY)) - r.top );
+          const cx = r.width/2;
+          const cy = r.height/2;
+          const dx = (x - cx);
+          const dy = (y - cy);
+          const tiltX = (dy / cy) * 8; // tilt intensity
+          const tiltY = (dx / cx) * -10;
+          card.style.transform = `rotateX(${tiltX}deg) rotateY(${tiltY}deg) scale(${card.dataset.scale || 1})`;
+          media.style.transform = `translateZ(40px) scale(${(card.dataset.scale || 1) + 0.02})`;
+        }
+
+        function reset() {
+          card.style.transform = `rotateX(0deg) rotateY(0deg) scale(1)`;
+          media.style.transform = 'translateZ(0px) scale(1)';
+        }
+
+        // mouse events
+        card.addEventListener('mousemove', handleMove);
+        card.addEventListener('mouseenter', () => {
+          card.style.transition = 'transform 0.18s ease';
+        });
+        card.addEventListener('mouseleave', () => {
+          card.style.transition = 'transform 0.6s cubic-bezier(.2,.9,.3,1)';
+          reset();
+        });
+
+        // touch fallback (gentle)
+        if (supportsTouch) {
+          card.addEventListener('touchstart', (ev) => {
+            handleMove(ev.touches[0]);
+          }, {passive:true});
+          card.addEventListener('touchmove', (ev) => {
+            handleMove(ev.touches[0]);
+          }, {passive:true});
+          card.addEventListener('touchend', () => reset());
+        }
+      }
+
+      cards.forEach(c => bindCard(c));
+    })();
+  </script>
+
+  <!-- your existing script (keep it after) -->
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

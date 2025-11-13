@@ -1,0 +1,335 @@
+<!doctype html>
+<html lang="id">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>CV — Aryan Banin</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&family=Inter:wght@300;400;500&display=swap" rel="stylesheet">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+  <style>
+    :root {
+      --primary: #1e40af;
+      --accent: #3b82f6;
+      --text-dark: #111827;
+      --text-light: #6b7280;
+      --bg-light: #f9fafb;
+      --card-bg: #ffffff;
+      --border: #e5e7eb;
+      --radius: 12px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-light);
+      color: var(--text-dark);
+      padding: 40px 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .resume-wrapper {
+      background: var(--card-bg);
+      width: 100%;
+      max-width: 900px;
+      border-radius: var(--radius);
+      box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .resume-wrapper:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 12px 35px rgba(0,0,0,0.12);
+    }
+
+    header {
+      background: linear-gradient(120deg, var(--primary), var(--accent));
+      color: white;
+      padding: 40px 50px;
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    header img {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 4px solid rgba(255,255,255,0.8);
+      box-shadow: 0 0 15px rgba(0,0,0,0.2);
+    }
+
+    .header-text h1 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 32px;
+      font-weight: 700;
+      margin-bottom: 5px;
+    }
+
+    .header-text p {
+      font-size: 15px;
+      opacity: 0.9;
+    }
+
+    .info {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 20px;
+      font-size: 14px;
+      margin-top: 12px;
+    }
+
+    .info div { opacity: 0.95; }
+    .info strong { color: white; font-weight: 600; }
+
+    .action-buttons {
+      margin-top: 20px;
+    }
+    .btn {
+      background: white;
+      color: var(--primary);
+      border: none;
+      padding: 8px 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      font-weight: 600;
+      margin-right: 10px;
+      transition: all 0.3s ease;
+    }
+    .btn:hover {
+      background: var(--accent);
+      color: white;
+    }
+
+    main {
+      padding: 40px 50px;
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 40px;
+    }
+
+    section h2 {
+      font-family: 'Poppins', sans-serif;
+      font-size: 18px;
+      color: var(--primary);
+      border-bottom: 2px solid var(--accent);
+      display: inline-block;
+      margin-bottom: 12px;
+      padding-bottom: 4px;
+    }
+
+    section p, li {
+      font-size: 15px;
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    ul { margin-top: 6px; margin-left: 20px; }
+
+    .job {
+      margin-bottom: 18px;
+      padding-bottom: 10px;
+      border-bottom: 1px solid var(--border);
+    }
+
+    .job-title {
+      font-weight: 600;
+      color: var(--text-dark);
+    }
+
+    .period {
+      float: right;
+      color: var(--accent);
+      font-size: 13px;
+    }
+
+    aside h3 {
+      color: var(--primary);
+      font-size: 16px;
+      margin-bottom: 8px;
+    }
+
+    aside p {
+      margin-bottom: 10px;
+      font-size: 14px;
+      color: var(--text-light);
+    }
+
+    .skill-tag {
+      display: inline-block;
+      background: var(--accent);
+      color: white;
+      padding: 6px 10px;
+      border-radius: 20px;
+      font-size: 13px;
+      margin: 4px 4px 4px 0;
+    }
+
+    footer {
+      background: var(--primary);
+      color: white;
+      text-align: center;
+      padding: 16px;
+      font-size: 14px;
+    }
+
+    @media (max-width: 800px) {
+      main { grid-template-columns: 1fr; padding: 30px; }
+      header { flex-direction: column; text-align: center; }
+    }
+  </style>
+</head>
+<body>
+  <div class="resume-wrapper" id="cv">
+    <header>
+      <img src="/assets/profile-placeholder.jpg" alt="Foto Profil" />
+      <div class="header-text">
+        <h1>Aryan Banin</h1>
+        <p>Senior Web Developer | React & Angular Specialist</p>
+        <div class="info">
+          <div><strong>📍</strong> Jakarta, Indonesia</div>
+          <div><strong>📞</strong> 0889-3829-1231</div>
+          <div><strong>✉️</strong> aryanbanin@gmail.com</div>
+          <div><strong>🔗</strong> LinkedIn: Aryan Banin</div>
+        </div>
+        <div class="action-buttons">
+          <button class="btn" id="printCV">🖨️ Print</button>
+          <button class="btn" id="downloadPDF">⬇️ Download PDF</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section>
+        <h2>Ringkasan</h2>
+        <p>Web Developer berpengalaman lebih dari 5 tahun dalam pengembangan aplikasi web responsif, modern, dan user-friendly. Menguasai HTML, CSS, JavaScript, React, dan Angular. Fokus pada kualitas kode, performa situs, serta pengalaman pengguna yang optimal.</p>
+
+        <h2>Pengalaman Kerja</h2>
+
+        <div class="job">
+          <div class="job-title">Senior Web Developer, XYZ Tech Solutions <span class="period">Jan 2021 – Sekarang</span></div>
+          <ul>
+            <li>Memimpin tim pengembangan proyek e-commerce besar, meningkatkan kecepatan halaman hingga 40%.</li>
+            <li>Mengembangkan fitur React.js kompleks untuk pengalaman pengguna lebih baik.</li>
+            <li>Mengimplementasikan API RESTful untuk sistem backend dan transaksi cepat.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-title">Web Developer, ABC Digital Agency <span class="period">Mei 2017 – Des 2020</span></div>
+          <ul>
+            <li>Membangun situs klien menggunakan HTML, CSS, dan JavaScript modern.</li>
+            <li>Berkolaborasi dengan tim SEO untuk optimasi peringkat organik 30% lebih tinggi.</li>
+            <li>Integrasi CMS WordPress untuk kemudahan update konten klien.</li>
+          </ul>
+        </div>
+
+        <div class="job">
+          <div class="job-title">Junior Web Developer, WebDev Co. <span class="period">Jul 2015 – Apr 2017</span></div>
+          <ul>
+            <li>Mengembangkan frontend proyek kecil-menengah menggunakan HTML dan CSS.</li>
+            <li>Membuat plugin dan tema WordPress sesuai kebutuhan klien.</li>
+          </ul>
+        </div>
+
+        <h2>Pendidikan</h2>
+        <p><strong>Sarjana Teknik Informatika</strong> — Universitas Teknologi XYZ (2011–2015)</p>
+        <ul>
+          <li>Lulus cum laude (IPK 3.85/4.00)</li>
+          <li>Proyek Akhir: “Pengembangan Aplikasi Web E-Commerce dengan Implementasi Pembayaran Online”</li>
+        </ul>
+      </section>
+
+      <aside>
+        <h3>Keterampilan</h3>
+        <div>
+          <span class="skill-tag">HTML5</span>
+          <span class="skill-tag">CSS3</span>
+          <span class="skill-tag">JavaScript (ES6+)</span>
+          <span class="skill-tag">React.js</span>
+          <span class="skill-tag">Angular</span>
+          <span class="skill-tag">PHP</span>
+          <span class="skill-tag">Python</span>
+          <span class="skill-tag">Docker</span>
+          <span class="skill-tag">Git</span>
+          <span class="skill-tag">RESTful APIs</span>
+        </div>
+
+        <h3>Sertifikasi</h3>
+        <p>Certified Web Developer – FreeCodeCamp</p>
+        <p>Responsive Web Design – Coursera</p>
+
+        <h3>Bahasa</h3>
+        <p>English • Malay • Japanese</p>
+
+        <h3>Penghargaan</h3>
+        <p>Berpartisipasi dalam program “Innovation for Tomorrow” untuk mendorong pendidikan STEM di komunitas lokal.</p>
+      </aside>
+    </main>
+
+    <footer>
+      © 2025 Aryan Banin — Dibuat dengan HTML, CSS, dan JS
+    </footer>
+  </div>
+
+  <script>
+document.getElementById("downloadPDF").addEventListener("click", function () {
+  const cvElement = document.getElementById("cv");
+
+  // Hilangkan tombol print & download saat generate PDF
+  const buttons = document.querySelector(".action-buttons");
+  buttons.style.display = "none";
+
+  const opt = {
+    margin: 0,
+    filename: 'CV-Aryan-Banin.pdf',
+    image: { type: 'jpeg', quality: 1 },
+    html2canvas: {
+      scale: 2,
+      useCORS: true,
+      scrollY: 0
+    },
+    jsPDF: {
+      unit: 'mm',
+      format: 'a4',
+      orientation: 'portrait'
+    },
+    pagebreak: { mode: ['avoid-all', 'css', 'legacy'] }
+  };
+
+  // Ambil ukuran asli elemen CV
+  const originalWidth = cvElement.offsetWidth;
+  const originalHeight = cvElement.offsetHeight;
+  const A4_WIDTH = 210;   // mm
+  const A4_HEIGHT = 297;  // mm
+
+  // Rasio ukuran layar ke mm untuk jsPDF
+  const pxToMm = (px) => px * 0.264583;
+
+  // Hitung skala biar muat ke satu halaman
+  const scaleX = A4_WIDTH / pxToMm(originalWidth);
+  const scaleY = A4_HEIGHT / pxToMm(originalHeight);
+  const scale = Math.min(scaleX, scaleY) * 0.95; // sedikit dikurangi agar aman di margin
+
+  // Terapkan transform untuk sementara agar pas ke 1 halaman
+  cvElement.style.transform = `scale(${scale})`;
+  cvElement.style.transformOrigin = "top left";
+  cvElement.style.width = "100%";
+  cvElement.style.margin = "0 auto";
+
+  // Tunggu sedikit lalu generate PDF
+  setTimeout(() => {
+    html2pdf().set(opt).from(cvElement).save().then(() => {
+      // Kembalikan ke tampilan normal
+      cvElement.style.transform = "";
+      buttons.style.display = "";
+    });
+  }, 500);
+});
+</script>
+
+</body>
+</html>

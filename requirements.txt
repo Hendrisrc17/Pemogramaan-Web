@@ -1,0 +1,43 @@
+# === Core Flask ===
+Flask==3.0.3
+Werkzeug==3.0.3
+Jinja2==3.1.4
+itsdangerous==2.2.0
+click==8.1.7
+
+# === Flask Extensions ===
+Flask-Cors==4.0.1           # izinkan akses dari Flutter / frontend lain
+Flask-Login==0.6.3          # login user (kalau ada sistem login)
+Flask-WTF==1.2.1            # form handler (kalau ada HTML form)
+
+# === Database Connector ===
+mysql-connector-python==9.1.0   # konektor resmi MySQL (tanpa ORM)
+PyMySQL==1.1.1                  # alternatif, optional
+
+# === AI / Machine Learning ===
+google-generativeai==0.8.3      # Gemini AI
+openai==1.52.1                  # (opsional) integrasi OpenAI GPT
+python-dotenv==1.0.1            # simpan API key di file .env
+
+# === Data Processing & Utilities ===
+requests==2.32.3
+pandas==2.2.3
+numpy==2.1.3
+
+# === Security (opsional tapi disarankan) ===
+Flask-Bcrypt==1.0.1
+Flask-JWT-Extended==4.6.0       # kalau pakai sistem login dengan token
+
+# === File & Image Handling ===
+Pillow==11.0.0                  # manipulasi gambar (foto profil, logo)
+Flask-Uploads==0.2.1            # upload file ke folder static/images
+
+# === Deployment & Debugging ===
+gunicorn==23.0.0                # untuk deploy di server (Linux)
+waitress==3.0.0                 # untuk deploy di Windows
+colorama==0.4.6                 # warna terminal
+pytest==8.3.3                   # unit testing
+
+# === Miscellaneous ===
+tqdm==4.66.5
+beautifulsoup4==4.13.2

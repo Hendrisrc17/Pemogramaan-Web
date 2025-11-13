@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="id">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Sertifikat | Dashboard</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+
+  <style>
+    /* === STYLE KHUSUS SERTIFIKAT === */
+    .certificate-container {
+      padding: 3rem 2rem;
+      min-height: 100vh;
+      background: var(--grey);
+      transition: 0.3s ease;
+    }
+
+    .certificate-header {
+      text-align: center;
+      margin-bottom: 2.5rem;
+      animation: fadeIn 0.6s ease forwards;
+    }
+
+    .certificate-header h1 {
+      font-size: 2rem;
+      color: var(--primary);
+      font-weight: 700;
+      text-transform: uppercase;
+      position: relative;
+    }
+
+    .certificate-header h1::after {
+      content: "";
+      position: absolute;
+      bottom: -8px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 80px;
+      height: 3px;
+      background: var(--primary);
+      border-radius: 3px;
+      box-shadow: 0 0 8px var(--light-primary);
+    }
+
+    .certificate-header p {
+      color: var(--dark-grey);
+      font-size: 1rem;
+      margin-top: 1rem;
+    }
+
+    /* === GRID SERTIFIKAT === */
+    .certificate-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      justify-items: center;
+      align-items: start;
+    }
+
+    .certificate-card {
+      background: var(--light);
+      border-radius: 20px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+      overflow: hidden;
+      transition: transform 0.4s ease, box-shadow 0.3s ease;
+      cursor: pointer;
+      transform-style: preserve-3d;
+      perspective: 1000px;
+      width: 100%;
+      max-width: 320px;
+    }
+
+    .certificate-card:hover {
+      transform: translateY(-10px) rotateX(4deg) rotateY(4deg);
+      box-shadow: 0 20px 40px rgba(25, 118, 210, 0.2);
+    }
+
+    .certificate-card img {
+      width: 100%;
+      height: 200px;
+      object-fit: cover;
+      border-bottom: 3px solid var(--primary);
+    }
+
+    .certificate-info {
+      padding: 1.2rem 1.5rem;
+      text-align: center;
+    }
+
+    .certificate-info h3 {
+      color: var(--primary);
+      font-size: 1.2rem;
+      font-weight: 600;
+      margin-bottom: 0.5rem;
+    }
+
+    .certificate-info p {
+      color: var(--dark-grey);
+      font-size: 0.95rem;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @media (max-width: 768px) {
+      .certificate-container {
+        padding: 2rem 1rem;
+      }
+
+      .certificate-card img {
+        height: 180px;
+      }
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#" class="logo">
+      <i class='bx bx-code-alt'></i>
+      <div class="logo-name"><span>Portofolio</span>CV</div>
+    </a>
+
+    <ul class="side-menu">
+      <li><a href="{{ url_for('dashboard') }}"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+      <li><a href="{{ url_for('riwayat') }}"><i class='bx bx-history'></i>Riwayat</a></li>
+      <li><a href="{{ url_for('skill') }}"><i class='bx bxs-brain'></i>Skill</a></li>
+      <li><a href="{{ url_for('project') }}"><i class='bx bx-code-block'></i>Project</a></li>
+      <li class="active"><a href="{{ url_for('sertifikat') }}"><i class='bx bxs-certification'></i>Sertifikat</a></li>
+      <li><a href="{{ url_for('upload') }}"><i class='bx bx-upload'></i>Upload</a></li>
+    </ul>
+
+    <ul class="side-menu">
+      <li>
+        <a href="#" class="logout">
+          <i class='bx bx-log-out'></i> Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <nav>
+      <i class='bx bx-menu'></i>
+      <form action="#">
+        <div class="form-input">
+          <input type="search" placeholder="Search...">
+          <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+        </div>
+      </form>
+      <a href="#" class="notif">
+        <i class='bx bx-bell'></i>
+        <span class="count">12</span>
+      </a>
+      <a href="#" class="profile">
+        <img src="images/logo.png" alt="Profile">
+      </a>
+    </nav>
+
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Sertifikat</h1>
+          <ul class="breadcrumb">
+            <li><a href="{{ url_for('dashboard') }}">Home</a></li> /
+            <li><a href="{{ url_for('sertifikat') }}" class="active">Sertifikat</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <section class="certificate-container">
+        <div class="certificate-header">
+            <h1>My Certificates</h1>
+            <p>Kumpulan sertifikat yang menunjukkan pencapaian dan keahlian saya dalam bidang teknologi dan desain.</p>
+        </div>
+
+        <div class="certificate-grid">
+            {% for c in certificates %}
+            <div class="certificate-card">
+            <img src="{{ url_for('static', filename=c.gambar_url) }}" alt="{{ c.judul }}">
+            <div class="certificate-info">
+                <h3>{{ c.judul }}</h3>
+                <p>{{ c.penyelenggara }} — {{ c.tahun }}</p>
+            </div>
+            </div>
+            {% else %}
+            <p style="text-align:center;color:gray;">Belum ada sertifikat yang diunggah.</p>
+            {% endfor %}
+        </div>
+        </section>
+
+<script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>

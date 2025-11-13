@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <title>Dashboard</title>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#" class="logo">
+      <i class='bx bx-code-alt'></i>
+      <div class="logo-name"><span>Portofolio</span>CV</div>
+    </a>
+
+    <ul class="side-menu">
+      <ul class="side-menu">
+      <li><a href="{{ url_for('dashboard') }}"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+      <li><a href="{{ url_for('riwayat') }}"><i class='bx bx-history'></i>Riwayat</a></li>
+      <li><a href="{{ url_for('skill') }}"><i class='bx bxs-brain'></i>Skill</a></li>
+      <li><a href="{{ url_for('project') }}"><i class='bx bx-code-block'></i>Project</a></li>
+      <li><a href="{{ url_for('sertifikat') }}"><i class='bx bxs-certification'></i>Sertifikat</a></li>
+      <li><a href="{{ url_for('upload') }}"><i class='bx bx-upload'></i>Upload</a></li>
+    </ul>
+
+    <ul class="side-menu">
+      <li>
+        <a href="#" class="logout">
+          <i class='bx bx-log-out'></i> Logout
+        </a>
+      </li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <!-- Navbar -->
+    <nav>
+      <i class='bx bx-menu'></i>
+
+      <form action="#">
+        <div class="form-input">
+          <input type="search" placeholder="Search...">
+          <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+        </div>
+      </form>
+      <a href="#" class="notif">
+        <i class='bx bx-bell'></i>
+        <span class="count">12</span>
+      </a>
+
+      <a href="#" class="profile">
+        <img src="images/logo.png" alt="Profile">
+      </a>
+    </nav>
+
+    <!-- Main Dashboard Section -->
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Dashboard</h1>
+          <ul class="breadcrumb">
+            <li><a href="{{ url_for('dashboard') }}">Home</a></li> /
+            <li><a href="{{ url_for('dashboard') }}" class="active">Dashboard</a></li>
+          </ul>
+        </div>
+      </div>
+      <!-- Card Identitas -->
+        <div class="student-card">
+        <!-- Sisi Kiri -->
+        <div class="student-left">
+            <h3>{{ data.jabatan }}</h3>
+            <h2>Kartu Pengenal</h2>
+
+            <div class="student-info">
+            <p><strong>Nama:</strong> <span id="student-name">{{ data.nama }}</span></p>
+            <p><strong>Tempat/Tanggal-lahir:</strong> <span id="student-Tempat/Tanggal-lahir">{{ data.tempat_tanggal_lahir }}</span></p>
+            <p><strong>NIM:</strong> <span id="student-nrp">{{ data.nrp }}</span></p>
+            <p><strong>Program Studi:</strong> <span id="student-prodi">{{ data.prodi }}</span></p>
+            <p><strong>Email:</strong> <span id="student-email">{{ data.email }}</span></p>
+            <p><strong>Telepon:</strong> <span id="student-telepon">{{ data.telepon }}</span></p>
+            <p><strong>Berlaku hingga:</strong> <span id="student-exp">{{ data.berlaku_hingga }}</span></p>
+            </div>
+        </div>
+        <!-- Sisi Kanan (Foto Mahasiswa) -->
+        <div class="student-photo">
+            <img src="{{ url_for('static', filename=data.foto_url) }}" alt="Foto Mahasiswa">
+            <div class="photo-bg"></div>
+        </div>
+        </div>
+    </main>
+  </div>
+
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+
+</html>

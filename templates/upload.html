@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Upload Data</title>
+  <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+  <style>
+    main {
+      padding: 2rem;
+      background: #f8f9fc;
+      min-height: 100vh;
+    }
+
+    .upload-container {
+      background: white;
+      padding: 2rem;
+      border-radius: 1rem;
+      box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+      max-width: 700px;
+      margin: 2rem auto;
+    }
+
+    .upload-container h2 {
+      margin-bottom: 1rem;
+      color: #003c8f;
+    }
+
+    .upload-container label {
+      font-weight: 600;
+      margin-top: 1rem;
+      display: block;
+    }
+
+    .upload-container input, 
+    .upload-container select, 
+    .upload-container textarea {
+      width: 100%;
+      padding: 0.6rem;
+      margin-top: 0.4rem;
+      border: 1px solid #ccc;
+      border-radius: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .upload-container button {
+      background: #003c8f;
+      color: white;
+      border: none;
+      padding: 0.8rem 1.2rem;
+      border-radius: 0.4rem;
+      cursor: pointer;
+      font-weight: 600;
+      margin-top: 1.5rem;
+    }
+
+    .upload-container button:hover {
+      background: #0050c9;
+    }
+
+    .hidden {
+      display: none;
+    }
+  </style>
+</head>
+
+<body>
+
+  <!-- Sidebar -->
+  <div class="sidebar">
+    <a href="#" class="logo">
+      <i class='bx bx-code-alt'></i>
+      <div class="logo-name"><span>Portofolio</span>CV</div>
+    </a>
+
+    <ul class="side-menu">
+      <li><a href="{{ url_for('dashboard') }}"><i class='bx bxs-dashboard'></i>Dashboard</a></li>
+      <li><a href="{{ url_for('riwayat') }}"><i class='bx bx-history'></i>Riwayat</a></li>
+      <li><a href="{{ url_for('skill') }}"><i class='bx bxs-brain'></i>Skill</a></li>
+      <li><a href="{{ url_for('project') }}"><i class='bx bx-code-block'></i>Project</a></li>
+      <li><a href="{{ url_for('sertifikat') }}"><i class='bx bxs-certification'></i>Sertifikat</a></li>
+      <li class="active"><a href="{{ url_for('upload') }}"><i class='bx bx-upload'></i>Upload</a></li>
+    </ul>
+
+    <ul class="side-menu">
+      <li><a href="#" class="logout"><i class='bx bx-log-out'></i> Logout</a></li>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="content">
+    <nav>
+      <i class='bx bx-menu'></i>
+      <form action="#">
+        <div class="form-input">
+          <input type="search" placeholder="Search...">
+          <button class="search-btn" type="submit"><i class='bx bx-search'></i></button>
+        </div>
+      </form>
+      <a href="#" class="notif"><i class='bx bx-bell'></i><span class="count">12</span></a>
+      <a href="#" class="profile"><img src="{{ url_for('static', filename='images/logo.png') }}" alt="Profile"></a>
+    </nav>
+
+    <main>
+      <div class="header">
+        <div class="left">
+          <h1>Upload Data</h1>
+          <ul class="breadcrumb">
+            <li><a href="{{ url_for('dashboard') }}">Home</a></li> /
+            <li><a href="{{ url_for('upload') }}" class="active">Upload</a></li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="upload-container">
+        <h2>Pilih Jenis Upload</h2>
+        <select id="uploadType">
+          <option value="" disabled selected>-- Pilih Jenis --</option>
+          <option value="certificate">Sertifikat</option>
+          <option value="project">Project</option>
+          <option value="skill">Skill</option>
+          <option value="timeline">Timeline</option>
+          <option value="portfolio">Card Portofolio</option>
+        </select>
+
+        <!-- === FORM: CERTIFICATE === -->
+        <form id="form-certificate" class="hidden" action="/upload/certificate" method="POST" enctype="multipart/form-data">
+          <label>Judul</label><input name="judul" required>
+          <label>Penyelenggara</label><input name="penyelenggara">
+          <label>Tahun</label><input name="tahun" type="number" min="2000" max="2100">
+          <label>Gambar</label><input name="gambar" type="file" required>
+          <button type="submit">Upload Sertifikat</button>
+        </form>
+
+        <!-- === FORM: PROJECT === -->
+        <form id="form-project" class="hidden" action="/upload/project" method="POST" enctype="multipart/form-data">
+          <label>Judul</label><input name="judul" required>
+          <label>Kategori</label><input name="kategori">
+          <label>Deskripsi</label><textarea name="deskripsi"></textarea>
+          <label>Tahun</label><input name="tahun" type="number">
+          <label>Teknologi</label><input name="teknologi">
+          <label>Link Demo</label><input name="link_demo">
+          <label>Gambar</label><input name="gambar" type="file">
+          <button type="submit">Upload Project</button>
+        </form>
+
+        <!-- === FORM: SKILL === -->
+        <form id="form-skill" class="hidden" action="/upload/skill" method="POST">
+          <label>Nama Skill</label><input name="nama" required>
+          <label>Persentase</label><input name="persen" type="number" min="0" max="100" required>
+          <button type="submit">Tambah Skill</button>
+        </form>
+
+        <!-- === FORM: TIMELINE === -->
+        <form id="form-timeline" class="hidden" action="/upload/timeline" method="POST">
+          <label>Icon</label><input name="icon" placeholder="bx-book, bx-trophy, dll">
+          <label>Judul</label><input name="judul" required>
+          <label>Tahun Mulai</label><input name="tahun_mulai">
+          <label>Tahun Selesai</label><input name="tahun_selesai">
+          <label>Deskripsi</label><textarea name="deskripsi"></textarea>
+          <label>Kategori</label><input name="kategori">
+          <button type="submit">Tambah Timeline</button>
+        </form>
+
+        <!-- === FORM: PORTFOLIO CARD === -->
+        <form id="form-portfolio" class="hidden" action="/upload/portfolio" method="POST" enctype="multipart/form-data">
+          <label>Nama</label><input name="nama" required>
+          <label>Tempat/Tanggal Lahir</label><input name="tempat_tanggal_lahir">
+          <label>NRP</label><input name="nrp">
+          <label>Program Studi</label><input name="prodi">
+          <label>Email</label><input name="email">
+          <label>Telepon</label><input name="telepon">
+          <label>Berlaku Hingga</label><input name="berlaku_hingga">
+          <label>Jabatan</label><input name="jabatan" placeholder="AI Engineer">
+          <label>Foto</label><input name="foto" type="file">
+          <label>CV File</label><input name="cv" type="file">
+          <button type="submit">Upload Portfolio Card</button>
+        </form>
+      </div>
+    </main>
+  </div>
+
+  <script>
+    const select = document.getElementById('uploadType');
+    const forms = document.querySelectorAll('form[id^="form-"]');
+
+    select.addEventListener('change', e => {
+      forms.forEach(f => f.classList.add('hidden'));
+      document.getElementById(`form-${e.target.value}`).classList.remove('hidden');
+    });
+  </script>
+  <script src="{{ url_for('static', filename='index.js') }}"></script>
+</body>
+</html>
